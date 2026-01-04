@@ -37,22 +37,12 @@ public class SubmitOrderTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = {"submitOrder"}, dataProvider = "getData")
-    public void orderHistoryTest(String email, String password, String productName)
+    public void orderHistoryTest(HashMap<String, String> input)
     {
-        ProductCatalogue productCatalogue = landingPage.loginApplication(email, password);
+        ProductCatalogue productCatalogue = landingPage.loginApplication(input.get("email"), input.get("password"));
         OrderPage orderPage = productCatalogue.goToOrderPage();
-        Assert.assertTrue(orderPage.verifyOrderDisplay(productName));
+        Assert.assertTrue(orderPage.verifyOrderDisplay(input.get("product")));
     }
-
-    public String getScreenshot(String testCaseName) throws IOException
-    {
-        TakesScreenshot ts = (TakesScreenshot)driver;
-        File source = ts.getScreenshotAs(OutputType.FILE);
-        File file = new File(System.getProperty("user.dir") + "\\reports\\" + testCaseName + ".png");
-        FileUtils.copyFile(source, file);
-        return System.getProperty("user.dir") + "\\reports\\" + testCaseName + ".png";
-    }
-
 
     @DataProvider
     public Object[][] getData() throws IOException
